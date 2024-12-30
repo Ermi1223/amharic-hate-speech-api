@@ -1,13 +1,23 @@
-# flask_app.py
 from flask import Flask, request, jsonify
 from transformers import BertTokenizer, BertForSequenceClassification
 import torch
+import os
+from dotenv import load_dotenv
 
 # Initialize Flask app
 app = Flask(__name__)
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the model name from the environment variable
+model_name = os.getenv("MODEL_NAME")
+
+# Ensure the model name is set in the .env file
+if not model_name:
+    raise ValueError("MODEL_NAME is not set in the .env file")
+
 # Load the model and tokenizer
-model_name = "ermi8/amharic-hate-speech-detection"
 model = BertForSequenceClassification.from_pretrained(model_name)
 tokenizer = BertTokenizer.from_pretrained(model_name)
 
